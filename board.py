@@ -39,14 +39,15 @@ class Board():
         # Board set-up
         for i in range(5):
             self.board.append([None] * 4)
+        #note: I swapped the two
         # White
-        self.board[4][3] = piece.Rook(True)
-        self.board[3][2] = piece.King(True)
+        self.board[4][3] = piece.Rook(False, False, None)
+        self.board[3][2] = piece.King(False, False, None)
 
 
         # Black
-        self.board[0][0] = piece.Rook(False)
-        self.board[1][1] = piece.King(False)
+        self.board[0][0] = piece.Rook(True, False, None)
+        self.board[1][1] = piece.King(True, False, None)
 
 
     def print_board(self):
@@ -79,5 +80,3 @@ class Board():
         for i in range(17):
             buffer += "*"
         print(buffer)
-
-

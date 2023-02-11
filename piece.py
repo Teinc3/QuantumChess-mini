@@ -1,6 +1,6 @@
 blocked_path = "There's a piece in the path."
 incorrect_path = "This piece does not move in this pattern."
-
+blockq = "There's a quantum piece in the path."
 
 def check_updown(board, start, to):
     """
@@ -22,8 +22,10 @@ def check_updown(board, start, to):
 
         for i in range(smaller_y + 1, bigger_y):
             if board.board[start[0]][i] != None:
+                q = start[0] + 1
+                k = chr(i + ord('a'))
+                print("At: " + str(q)+ str(k))
                 print(blocked_path)
-                print("At: " + str(start[0], i))
                 return False
         return True
     else:
@@ -32,6 +34,9 @@ def check_updown(board, start, to):
 
         for i in range(smaller_x + 1, bigger_x):
             if board.board[i][start[1]] != None:
+                q = i + 1
+                k = chr(start[1] + ord('a'))
+                print("At: " + str(q) + str(k))
                 print(blocked_path)
                 return False
         return True
@@ -57,40 +62,54 @@ class Piece():
 
     color : bool
         True if piece is white
-
+        
+    split : bool
+        True if piece is split
+    
+    joint : tup
+      storing coordinates of other split piece to update entangled pieces
+        
     Methods:
     --------
     is_valid_move(board, start, to) -> bool
         Returns True if moving the piece at `start` to `to` is a legal
         move on board `board`
         Precondition: [start] and [to] are valid coordinates on the board.board
+        
     is_white() -> bool
         Return True if piece is white
-
+        
+    is_split() -> bool
+        Return True if piece is split
     """
-    def __init__(self, color):
+    def __init__(self, color, split, joint):
         self.name = ""
         self.color = color
+        self.split = False
+        self.joint = None
 
     def is_valid_move(self, board, start, to):
         return False
 
     def is_white(self):
         return self.color
-
+    
+    def is_split(self):
+        return self.split
+        
     def __str__(self):
-        if self.color:
-            return self.name
-        else:
+        if self.color:#white
             return '\033[94m' + self.name + '\033[0m'
+        else:
+            return self.name
 
 class Rook(Piece):
-    def __init__(self, color, first_move = True):
+    def __init__(self, color, split, joint, first_move = True):
         """
         Same as base class Piece, except `first_move` is used to check
         if this rook can castle.
         """
-        super().__init__(color)
+        super().__init__(color, split, joint)
         self.name = "R"
         self.first_move = first_move 
 
@@ -101,12 +120,12 @@ class Rook(Piece):
         return False
 
 class King(Piece):
-    def __init__(self, color, first_move = True):
+    def __init__(self, color, split, joint, first_move = True):
         """
         Same as base class Piece, except `first_move` is used to check
         if this king can castle.
         """
-        super().__init__(color)
+        super().__init__(color, split, joint)
         self.name = "K"
         self.first_move = first_move
 
